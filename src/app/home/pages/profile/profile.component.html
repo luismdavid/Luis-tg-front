@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding" *ngIf="currentUser">
+  <ion-grid>
+    <form [formGroup]="form">
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="12">
+          <app-image-picker
+            (imagePicked)="uploadProfileImage($event)"
+            [showPreview]="true"
+            [selectedImage]="currentUser.profileImg"
+          ></app-image-picker>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-item>
+            <ion-icon name="person-outline" slot="start"></ion-icon>
+            <ion-label position="floating">Nombre</ion-label>
+            <ion-input
+              formControlName="name"
+              [value]="currentUser.name"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-item>
+            <ion-icon name="mail-outline" slot="start"></ion-icon>
+            <ion-label position="floating">Correo Electronico</ion-label>
+            <ion-input
+              formControlName="email"
+              [value]="currentUser.email"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-item>
+            <ion-icon name="phone-portrait-outline" slot="start"></ion-icon>
+            <ion-label position="floating">Numero de telefono</ion-label>
+            <ion-input
+              formControlName="phoneNumber"
+              [value]="currentUser.phoneNumber"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-button
+            (click)="saveChanges()"
+            expand="block"
+            [disabled]="!validateChanged() || !form.valid || loading"
+            ><strong *ngIf="!loading">Guardar cambios</strong>
+            <ion-spinner
+              class="ion-text-center"
+              *ngIf="loading"
+              color="light"
+            ></ion-spinner></ion-button
+          >
+        </ion-col>
+      </ion-row>
+    </form>
+  </ion-grid>
+</ion-content>

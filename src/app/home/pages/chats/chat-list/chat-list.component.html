@@ -1,0 +1,14 @@
+<ion-grid *ngIf="loading">
+  <ion-row>
+    <ion-spinner></ion-spinner>
+  </ion-row>
+</ion-grid>
+<ion-list *ngIf="!loading">
+  <app-chat-preview
+    *ngFor="let chat of chats"
+    [chat]="chat"
+    (onSelected)="selectedChat(chat)"
+    (onDelete)="deleteChat(chat)"
+    [currentUser]="currentUser"
+  ></app-chat-preview>
+</ion-list>

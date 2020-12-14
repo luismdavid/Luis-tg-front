@@ -1,0 +1,26 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Searchbar</ion-title>
+    <ion-buttons slot="secondary">
+      <ion-button (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      (ionChange)="searchUsers($event)"
+      [debounce]="500"
+    ></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+  <ion-spinner *ngIf="searching"></ion-spinner>
+  <ion-list *ngIf="!searching">
+    <app-user-item
+      *ngFor="let user of users"
+      [user]="user"
+      (click)="selectedUser(user)"
+    ></app-user-item>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,28 @@
+<ion-content>
+  <nb-chat
+    [title]="currentChat?.title"
+    scrollBottom
+    #chat
+    [nbSpinner]="loading"
+  >
+    <nb-chat-message
+      *ngFor="let msg of currentChat?.messages"
+      [type]="msg.type"
+      [message]="msg.content"
+      [reply]="(msg.sender | cast)._id === currentUser._id"
+      [sender]="(msg.sender | cast).name"
+      [date]="msg.sentDate"
+      [files]="msg.attachments"
+      [avatar]="(msg.sender | cast).profileImg"
+    >
+    </nb-chat-message>
+
+    <nb-chat-form (send)="sendMessage($event)" [dropFiles]="true">
+    </nb-chat-form>
+  </nb-chat>
+</ion-content>
+<app-image-picker
+  #imagePicker
+  [visible]="false"
+  (imagePicked)="uploadMsgWithImg($event)"
+></app-image-picker>

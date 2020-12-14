@@ -1,0 +1,19 @@
+<div class="ion-padding">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Codigo de verificacion</ion-label>
+          <ion-input [(ngModel)]="verificationCode"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button [disabled]="loading" expand="block" (click)="verifyCode()"
+          >Enviar</ion-button
+        >
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>

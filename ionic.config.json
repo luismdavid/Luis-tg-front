@@ -1,0 +1,7 @@
+{
+  "name": "luis-telegram-front",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
