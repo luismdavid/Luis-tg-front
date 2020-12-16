@@ -20,6 +20,7 @@ import {
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { CastPipe } from 'src/app/pipes/cast.pipe';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { OptionsListComponent } from './options-list/options-list.component';
 
 const nbModules = [
   NbSidebarModule,
@@ -42,6 +43,6 @@ const nbModules = [
     NbThemeModule.forRoot({ name: 'dark' }),
     ...nbModules
   ],
-  declarations: [ChatViewPage, CastPipe],
+  declarations: [ChatViewPage, OptionsListComponent, CastPipe],
 })
 export class ChatViewPageModule {}

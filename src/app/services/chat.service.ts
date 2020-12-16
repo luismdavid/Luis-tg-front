@@ -21,10 +21,15 @@ export class ChatService {
 
   subChats(): Observable<ChatModel[]> {
     return this.socket.fromEvent<ChatModel[]>('chats-changed').pipe(
-      map((x) => x.map(chat => ({
-        ...chat,
-        messages: chat.messages.map(mes => ({ ...mes, sentDate: new Date(mes.sentDate )}))
-      }))) 
+      map((x) =>
+        x.map((chat) => ({
+          ...chat,
+          messages: (chat.messages as MessageModel[]).map((mes) => ({
+            ...mes,
+            sentDate: new Date(mes.sentDate),
+          })),
+        }))
+      )
     );
   }
 
@@ -32,10 +37,17 @@ export class ChatService {
     return this.http.post(environment.API + '/chats', newChat);
   }
 
+  updateChat(chat: ChatModel): Observable<ChatModel> {
+    return this.http.put<ChatModel>(environment.API + '/chats', chat); 
+  }
+
   joinChat(chatId: string, userId: string) {
     return this.socket.emit('join-chat', { chatId, userId });
   }
 
+  closeSingleChat() {
+    return this.socket.emit('leave-chat');
+  }
   subSingleChat(): Observable<ChatModel> {
     return this.socket.fromEvent('chat-changed');
   }
@@ -45,16 +57,21 @@ export class ChatService {
   }
 
   sendMessage(chatId: string, message: MessageModel) {
-    return this.http.post<MessageModel>(environment.API + '/chats/message?chatId=' + chatId, message);
+    return this.http.post<MessageModel>(
+      environment.API + '/chats/message?chatId=' + chatId,
+      message
+    );
   }
 
-  uploadMessageImage(image: File | Blob) { 
+  uploadMessageImage(image: File | Blob): Observable<{ url: string }> {
     const fd = new FormData();
     fd.append('file', image);
-    return this.http.post(environment.API + '/chats/message/upload', fd);
+    return this.http.post<{ url: string }>(environment.API + '/chats/message/upload', fd);
   }
 
   deleteChatParticipant(chatId: string) {
-    return this.http.delete(`${environment.API}/chats/message?chatId=${chatId}`);
+    return this.http.delete(
+      `${environment.API}/chats/message?chatId=${chatId}`
+    );
   }
 }

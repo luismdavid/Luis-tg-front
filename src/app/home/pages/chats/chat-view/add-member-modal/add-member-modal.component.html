@@ -1,0 +1,50 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Añadir miembros</ion-title>
+    <ion-buttons slot="secondary">
+      <ion-button (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-item>
+      <ion-chip
+        *ngFor="let user of newMembers"
+        (click)="removeMember(user._id)"
+      >
+        <ion-label>{{ user.name }}</ion-label>
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-chip>
+      <ion-icon name="search-outline" slot="start"></ion-icon>
+      <ion-input
+        type="text"
+        [(ngModel)]="searchBarValue"
+        (ionChange)="searchUsers($event)"
+        placeholder="Agrege usuarios al chat..."
+      ></ion-input>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+  <div *ngIf="searching">
+    <ion-spinner></ion-spinner>
+  </div>
+  <ion-list *ngIf="!searching">
+    <app-user-item
+      *ngFor="let user of users"
+      [user]="user"
+      (click)="selectedUser(user)"
+    ></app-user-item>
+  </ion-list>
+  <ion-fab
+    vertical="bottom"
+    horizontal="end"
+    slot="fixed"
+    *ngIf="newMembers.length > 0"
+  >
+    <ion-fab-button (click)="saveNewMembers()">
+      <ion-icon name="checkmark-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

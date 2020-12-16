@@ -1,4 +1,13 @@
 <ion-content>
+  <ion-fab 
+    vertical="top"
+    horizontal="end"
+    slot="fixed"
+    *ngIf="(this.currentChat?.type === 'channel' && isAdmin) || this.currentChat?.type === 'group'">
+    <ion-fab-button (click)="openEditModal()">
+      <ion-icon name="pencil-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
   <nb-chat
     [title]="currentChat?.title"
     scrollBottom
@@ -17,7 +26,7 @@
     >
     </nb-chat-message>
 
-    <nb-chat-form (send)="sendMessage($event)" [dropFiles]="true">
+    <nb-chat-form (send)="sendMessage($event)" [showButton]="currentChat?.type !== 'channel' || isAdmin" [dropFiles]="true">
     </nb-chat-form>
   </nb-chat>
 </ion-content>

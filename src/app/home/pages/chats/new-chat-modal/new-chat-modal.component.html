@@ -1,6 +1,6 @@
 <ion-header translucent>
   <ion-toolbar>
-    <ion-title>Searchbar</ion-title>
+    <ion-title>Crear chat</ion-title>
     <ion-buttons slot="secondary">
       <ion-button (click)="close()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -9,18 +9,97 @@
   </ion-toolbar>
   <ion-toolbar>
     <ion-searchbar
+      *ngIf="type === 'private'"
+      [(ngModel)]="searchBarValue"
       (ionChange)="searchUsers($event)"
+      placeholder="Seleccione un usuario..."
       [debounce]="500"
     ></ion-searchbar>
+    <ion-item *ngIf="type !== 'private'">
+      <ion-chip
+        *ngFor="let user of participants"
+        (click)="removeParticipant(user._id)"
+      >
+        <ion-label>{{ user.name }}</ion-label>
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-chip>
+      <ion-icon name="search-outline" slot="start"></ion-icon>
+      <ion-input
+        type="text" 
+        [disabled]="activeSlideIndex !== 0"
+        [(ngModel)]="searchBarValue"
+        (ionChange)="searchUsers($event)"
+        placeholder="Agrege usuarios al chat..."
+      ></ion-input>
+    </ion-item>
   </ion-toolbar>
 </ion-header>
 <ion-content fullscreen>
-  <ion-spinner *ngIf="searching"></ion-spinner>
-  <ion-list *ngIf="!searching">
-    <app-user-item
-      *ngFor="let user of users"
-      [user]="user"
-      (click)="selectedUser(user)"
-    ></app-user-item>
-  </ion-list>
+  <ng-container *ngIf="type === 'private'">
+    <div *ngIf="searching">
+      <ion-spinner></ion-spinner>
+    </div>
+    <ion-list *ngIf="!searching">
+      <app-user-item
+        *ngFor="let user of users"
+        [user]="user"
+        (click)="selectedUser(user)"
+      ></app-user-item>
+    </ion-list>
+  </ng-container>
+
+  <ion-slides *ngIf="type !== 'private'" #slide (ionSlideDidChange)="onSlideChange($event)">
+    <ion-slide>
+      <div *ngIf="searching">
+        <ion-spinner></ion-spinner>
+      </div>
+      <ion-list *ngIf="!searching">
+        <app-user-item
+          *ngFor="let user of users"
+          [user]="user"
+          (click)="selectedUser(user)"
+        ></app-user-item>
+      </ion-list>
+      <ion-fab
+        vertical="bottom"
+        horizontal="end"
+        slot="fixed"
+        *ngIf="participants.length > 0"
+      >
+        <ion-fab-button (click)="slide.slideNext()">
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </ion-slide>
+    <ion-slide class="ion-padding">
+      <app-image-picker
+        (imagePicked)="this.imageAuxiliar = $event"
+        [showPreview]="true"
+      ></app-image-picker>
+      <ion-item>
+        <ion-label position="floating">Nombre del grupo</ion-label>
+        <ion-input [(ngModel)]="groupName"></ion-input>
+      </ion-item>
+      <h4>
+        {{ participants.length }}
+        {{ participants.length === 1 ? 'miembro' : 'miembros' }}
+      </h4>
+      <ion-list>
+        <app-user-item
+          *ngFor="let user of participants"
+          [user]="user"
+        ></app-user-item>
+      </ion-list>
+      <ion-fab
+        vertical="bottom"
+        horizontal="end"
+        slot="fixed"
+        *ngIf="groupName && imageAuxiliar"
+      >
+        <ion-fab-button (click)="createGroup()">
+          <ion-icon name="checkmark-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </ion-slide>
+  </ion-slides>
 </ion-content>

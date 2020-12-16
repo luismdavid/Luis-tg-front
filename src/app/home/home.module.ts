@@ -14,6 +14,8 @@ import { NewChatModalComponent } from './pages/chats/new-chat-modal/new-chat-mod
 import { UserItemComponent } from './pages/chats/user-item/user-item.component';
 import { ChatListComponent } from './pages/chats/chat-list/chat-list.component';
 import { CastPipe } from '../pipes/cast.pipe';
+import { EditChatModalComponent } from './pages/chats/chat-view/edit-chat-modal/edit-chat-modal.component';
+import { AddMemberModalComponent } from './pages/chats/chat-view/add-member-modal/add-member-modal.component';
 
 @NgModule({
   imports: [
@@ -32,7 +34,9 @@ import { CastPipe } from '../pipes/cast.pipe';
     ChatPreviewComponent,
     NewChatModalComponent,
     UserItemComponent,
-    ChatListComponent
+    EditChatModalComponent,
+    ChatListComponent,
+    AddMemberModalComponent
   ],
 })
 export class HomePageModule {}

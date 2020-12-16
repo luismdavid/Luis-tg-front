@@ -39,6 +39,13 @@ export class ChatsComponent implements OnInit {
         header: 'Tipo de chat',
         buttons: [
           {
+            text: 'Canal',
+            icon: 'megaphone-outline',
+            handler: () => {
+              this.showModal('channel');
+            }
+          },
+          {
             text: 'Grupo',
             icon: 'people-outline',
             handler: () => {
@@ -57,7 +64,7 @@ export class ChatsComponent implements OnInit {
       .then((sheet) => sheet.present());
   }
 
-  showModal(type: 'private' | 'group') {
+  showModal(type: 'private' | 'group' | 'channel') {
     this.modalCtrl
       .create({
         component: NewChatModalComponent,

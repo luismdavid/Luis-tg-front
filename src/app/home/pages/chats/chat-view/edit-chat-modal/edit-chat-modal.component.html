@@ -1,0 +1,65 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>{{ currentChat?.title }}</ion-title>
+    <ion-buttons slot="secondary">
+      <ion-button (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen class="ion-padding">
+  <app-image-picker
+    (imagePicked)="uploadImage($event)"
+    [showPreview]="true"
+    [selectedImage]="currentChat.image"
+  ></app-image-picker>
+  <ion-item>
+    <ion-label position="floating">Nombre del grupo</ion-label>
+    <ion-input [(ngModel)]="currentChat.title"></ion-input>
+  </ion-item>
+  <div *ngIf="currentChat.type === 'channel'">
+    <h4>
+      {{ currentChat.admins.length }}
+      {{ currentChat.admins.length === 1 ? 'Administrador' : 'Administradores' }}
+    </h4>
+    <ion-item button (click)="addAdmins()">
+      <ion-icon slot="start" name="ribbon-outline"></ion-icon>
+      <ion-label>Agregar administradores</ion-label>
+    </ion-item>
+    <ion-list>
+      <app-user-item
+        *ngFor="let user of currentChat.admins"
+        [user]="user"
+        (click)="openUserOptions($event, user, true)"
+      ></app-user-item>
+    </ion-list>
+  </div>
+  <div>
+    <h4>
+      {{ currentChat.participants.length }}
+      {{ currentChat.participants.length === 1 ? 'Miembro' : 'Miembros' }}
+    </h4>
+    <ion-item button (click)="addMembers()">
+      <ion-icon slot="start" name="people-outline"></ion-icon>
+      <ion-label>Agregar miembros</ion-label>
+    </ion-item>
+    <ion-list>
+      <app-user-item
+        *ngFor="let user of currentChat.participants"
+        [user]="user"
+        (click)="openUserOptions($event, user)"
+      ></app-user-item>
+    </ion-list>
+  </div>
+  <ion-fab
+    vertical="bottom"
+    horizontal="end"
+    slot="fixed"
+    *ngIf="currentChat.title && currentChat.image"
+  >
+    <ion-fab-button (click)="saveChanges()">
+      <ion-icon name="save-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

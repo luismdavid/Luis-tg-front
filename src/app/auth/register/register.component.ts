@@ -60,7 +60,6 @@ export class RegisterComponent implements OnInit {
   }
 
   sendVerificationCode() {
-    this.loading = true;
     this.auth.sendVerificationCode(this.form.value.phoneNumber).subscribe(
       (res) => {
         this.loading = false;
@@ -86,16 +85,20 @@ export class RegisterComponent implements OnInit {
   changedPhone(obj) {}
 
   createUser() {
+    this.loading = true;
     if (!this.form.get('verificationCode')) {
       return this.sendVerificationCode();
     }
     this.auth
       .verifyCode(this.form.value.phoneNumber, this.form.value.verificationCode)
-      .pipe(switchMap(() => this.auth.registerUser(this.form.value)))
+      .pipe(
+        switchMap(() => this.auth.registerUser(this.form.value)),
+        switchMap(() => this.auth.loginUser(this.form.value))
+      )
       .subscribe(
         () => {
-          this.loading = true;
-          this.nav.navigateRoot('/auth/login');
+          this.loading = false;
+          this.nav.navigateRoot('/home');
         },
         ({ error }) => {
           this.toast.show(error.message);

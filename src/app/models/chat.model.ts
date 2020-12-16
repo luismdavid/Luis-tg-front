@@ -5,7 +5,8 @@ export interface ChatModel {
     _id?: string;
     title: string;
     participants: UserModel[] | string[],
-    messages: MessageModel[],
-    isPrivate: boolean,
+    admins: UserModel[] | string[],
+    messages: MessageModel[] | string[],
+    type: 'private' | 'group' | 'channel',
     image?: string;
 }

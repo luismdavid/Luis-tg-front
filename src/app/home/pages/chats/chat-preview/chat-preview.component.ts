@@ -28,14 +28,14 @@ export class ChatPreviewComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['chat']) {
-      this.mostRecentMsg = this.chat.messages.sort((a, b) => {
+      this.mostRecentMsg = (this.chat.messages as MessageModel[]).sort((a, b) => {
         return (b.sentDate as Date).getTime() - (a.sentDate as Date).getTime();
       })[0];
     }
   }
 
   ngOnInit() {
-    if (this.chat.isPrivate) {
+    if (this.chat.type === 'private') {
       const other = (this.chat.participants as UserModel[]).find(
         (x) => x._id !== this.currentUser._id
       );
